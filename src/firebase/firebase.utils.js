@@ -13,27 +13,60 @@ const config = {
 };
 
 
-export const createUserProfileDocument= async (userAuth,additionalData)=>{
- if (!userAuth) return;
- const userRef=firestore.doc(`users/${userAuth.uid}`);
- const snapShot=await userRef.get();
- if(!snapShot.exists){
-   const {displayName,email}=userAuth;
-   const createtedAt=new Date();
-   try{
-    await userRef.set({
-      displayName,
-      email,
-      ...additionalData
-    })
-   } catch(error){
-     console.log('error creating user',error.message);
-   }
- }
- //console.log(snapShot);
- return userRef;
+export const createUserProfileDocument = async (userAuth, additionalData) => {
+  if (!userAuth) return;
+  const userRef = firestore.doc(`users/${userAuth.uid}`);
+  const snapShot = await userRef.get();
+  // const collectionRef=firestore.collection('users');
+  //  const collectionSnapshot=await collectionRef.get();
+  //  console.log({collection:collectionSnapshot.docs.map(doc=>doc.data())});
+  if (!snapShot.exists) {
+    const { displayName, email } = userAuth;
+    const createtedAt = new Date();
+    try {
+      await userRef.set({
+        displayName,
+        email,
+        createtedAt,
+        ...additionalData
+      })
+    } catch (error) {
+      console.log('error creating user', error.message);
+    }
+  }
 
-}; 
+  return userRef;
+
+};
+
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+  const collectionRef = firestore.collection(collectionKey);
+
+  const batch = firestore.batch();
+  objectsToAdd.forEach(obj => {
+    const newDocRef = collectionRef.doc();
+    batch.set(newDocRef, obj)
+    console.log(newDocRef);
+
+  });
+  return await batch.commit()
+}
+
+export const convertCollectionsSnapshotToMap = (collections) => {
+  const tarnsformedCollection = collections.docs.map(doc => {
+    const { title, items } = doc.data();
+    return {
+      routeName: encodeURI(title.toLowerCase()),
+      id: doc.id,
+      title,
+      items
+    };
+  })
+  return tarnsformedCollection.reduce((accumulator, collection) => {
+    accumulator[collection.title.toLowerCase()] = collection;
+    return accumulator;
+  }, {});
+}
 
 firebase.initializeApp(config);
 export const auth = firebase.auth();
