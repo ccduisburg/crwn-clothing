@@ -27,13 +27,6 @@ state={
       updateCollections(collectionsMap);
       this.setState({loading: false})
       });
-
-    
-    // this.unsubscribeFormSnapshot = collectionRef.onSnapshot(async snapshot => {
-    //   const collectionsMap = convertCollectionsSnapshotToMap(snapshot)
-    // updateCollections(collectionsMap);
-    // this.setState({loading: false})
-    // })
   }
   render() {
     const {loading}=this.state;
