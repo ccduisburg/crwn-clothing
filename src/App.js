@@ -32,12 +32,10 @@ class App extends Component {
                 ...snapShot.data()
               
             }
-          );
-       //   console.log(this.state);
+          );      
         });
       }
-      setCurrentUser(userAuth );
-     // addCollectionAndDocuments('collections',collectionsArray.map(({title,items})=>({title,items})))
+      setCurrentUser(userAuth );    
     });
   }
   componentWillUnmount() {
