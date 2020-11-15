@@ -28,7 +28,7 @@ const CheckoutPage = ({ cartItems, total }) => (
         </CheckoutHeaderContainer>
         {cartItems.map(cartItem => <CheckoutItem key={cartItem.id} cartItem={cartItem} />)}
         <CheckoutTotal>
-            TOTAL: ${total}
+            TOTAL: €{total}
         </CheckoutTotal>
 
         <StripeCheckoutButton price={total} />
